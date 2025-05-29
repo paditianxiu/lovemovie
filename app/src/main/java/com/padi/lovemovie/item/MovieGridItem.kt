@@ -60,6 +60,7 @@ import coil3.network.NetworkHeaders
 import coil3.network.httpHeaders
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.padi.lovemovie.LocalBottomSheet
 import com.padi.lovemovie.LocalMainNavController
 import com.padi.lovemovie.page.DetailPage
 import com.padi.lovemovie.viewmodel.ApiViewModel
@@ -74,14 +75,13 @@ import java.net.URLEncoder
 fun MovieGridItem(data: Any) {
     var title = ""
     var imgUrl = ""
-    var showBottomSheet by rememberSaveable { mutableStateOf(false) }
     var clickTitle by rememberSaveable { mutableStateOf("") }
-    val mainNavController= LocalMainNavController.current
-
+    val mainNavController = LocalMainNavController.current
+    val bottomSheetViewModel = LocalBottomSheet.current
+    val bottomSheetState by bottomSheetViewModel.state.collectAsState()
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = false,
     )
-
     when (data) {
         is JSONObject -> {
             title = data.optString("title") ?: "未知标题"
@@ -101,8 +101,8 @@ fun MovieGridItem(data: Any) {
 
     Surface(
         shape = MaterialTheme.shapes.small, onClick = {
-            showBottomSheet = true
             clickTitle = title
+            bottomSheetViewModel.setShowBottomSheet(true)
         }, color = MaterialTheme.colorScheme.surface, border = CardDefaults.outlinedCardBorder(
             enabled = false
         ), modifier = Modifier.fillMaxWidth()
@@ -130,7 +130,7 @@ fun MovieGridItem(data: Any) {
 
     }
 
-    if (showBottomSheet) {
+    if (bottomSheetState.showBottomSheet) {
         val apiViewModel: ApiViewModel = viewModel()
         val apiState by apiViewModel.state.collectAsState()
         val viewModel: SearchViewModel = viewModel()
@@ -142,7 +142,6 @@ fun MovieGridItem(data: Any) {
         var keyword by rememberSaveable { mutableStateOf(clickTitle) }
         val listState = rememberLazyGridState()
         var isSearch by remember { mutableStateOf(false) }
-
         var currentShape by remember { mutableStateOf<Shape>(RoundedCornerShape(16.dp)) }
 
         LaunchedEffect(sheetState.currentValue) {
@@ -159,7 +158,7 @@ fun MovieGridItem(data: Any) {
 
         }
         ModalBottomSheet(
-            onDismissRequest = { showBottomSheet = false },
+            onDismissRequest = { bottomSheetViewModel.setShowBottomSheet(false) },
             sheetState = sheetState,
             shape = currentShape
         ) {
