@@ -7,12 +7,12 @@ import kotlinx.coroutines.flow.update
 
 
 class SharedViewModel : ViewModel() {
-    data class State(val showBottomSheet: Boolean = false)
+    data class State(val showBottomSheet: String = "")
 
     private val _state = MutableStateFlow(State())
     val state: StateFlow<State> = _state.asStateFlow()
 
-    fun setShowBottomSheet(value: Boolean) {
+    fun setShowBottomSheet(value: String) {
         _state.update {
             it.copy(showBottomSheet = value)
         }

@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -50,18 +49,18 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -69,6 +68,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
+import com.padi.lovemovie.item.VideoSheet
 import com.padi.lovemovie.page.ComingSoonPage
 import com.padi.lovemovie.page.DetailPage
 import com.padi.lovemovie.page.HotPage
@@ -78,7 +78,7 @@ import com.padi.lovemovie.viewmodel.SharedViewModel
 import kotlinx.coroutines.launch
 
 data class BottomNavItem(
-    val route: String, val label: String, val icon: ImageVector
+    val route: String, val label: String, val icon: ImageVector,
 )
 
 
@@ -110,11 +110,20 @@ class MainActivity : ComponentActivity() {
                         startDestination = "home",
                     ) {
                         composable("home") {
+                            val sheetState = rememberModalBottomSheetState(
+                                skipPartiallyExpanded = false,
+                            )
+                            val showSheet = rememberSaveable {
+                                mutableStateOf(false)
+                            }
+                            VideoSheet(showSheet.value, "", sheetState) {
+                                showSheet.value = false
+                            }
                             Scaffold(
                                 topBar = {
                                     TopAppBar(title = { Text("爱搜片") }, actions = {
                                         IconButton(onClick = {
-                                            sharedViewModel.setShowBottomSheet(true)
+                                            showSheet.value = true
                                         }) {
                                             Icon(
                                                 imageVector = Icons.Default.Search,
