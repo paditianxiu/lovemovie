@@ -65,7 +65,7 @@ import java.net.URLEncoder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VideoSheet(showSheet: Boolean,clickTitle: String,sheetState: SheetState,onSheetStateChange:(Boolean) -> Unit) {
+fun VideoSheet(showSheet: Boolean,clickTitle: String,sheetState: SheetState,autoSearch: Boolean = false,onSheetStateChange:(Boolean) -> Unit) {
     if (showSheet) {
         val apiViewModel: ApiViewModel = viewModel()
         val apiState by apiViewModel.state.collectAsState()

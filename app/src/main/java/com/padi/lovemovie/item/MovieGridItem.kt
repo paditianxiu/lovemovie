@@ -89,7 +89,7 @@ fun MovieGridItem(data: Any) {
         }
 
     }
-    VideoSheet(showSheet.value, clickTitle, sheetState) {
+    VideoSheet(showSheet.value, clickTitle, autoSearch = true, sheetState = sheetState) {
         showSheet.value = false
     }
 }

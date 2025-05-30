@@ -1,6 +1,7 @@
 package com.padi.lovemovie
 
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -68,6 +70,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
+import com.blankj.utilcode.util.RomUtils
 import com.padi.lovemovie.item.VideoSheet
 import com.padi.lovemovie.page.ComingSoonPage
 import com.padi.lovemovie.page.DetailPage
@@ -96,6 +99,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        if (RomUtils.isXiaomi())
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
         setContent {
             爱搜片Theme {
                 val homeNavController = rememberNavController()
@@ -132,6 +137,7 @@ class MainActivity : ComponentActivity() {
                                         }
                                     })
                                 },
+                                contentWindowInsets = WindowInsets(0),
                                 bottomBar = {
                                     val navBackStackEntry =
                                         homeNavController.currentBackStackEntryAsState().value

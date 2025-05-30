@@ -40,7 +40,7 @@ android {
 }
 
 dependencies {
-
+    implementation("com.blankj:utilcodex:1.31.1")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
