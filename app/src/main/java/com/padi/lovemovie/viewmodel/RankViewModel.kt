@@ -24,12 +24,14 @@ data class RankData(
 
 class RankViewModel : ViewModel() {
     data class State(val list: List<RankData>? = mutableListOf<RankData>())
+
     val state = MutableStateFlow(State())
 
-    val flow= Pager(config = PagingConfig(pageSize = 25)){
+    val flow = Pager(config = PagingConfig(pageSize = 25)) {
         RankPagingSource()
     }.flow
         .cachedIn(viewModelScope)
+
     class RankPagingSource : PagingSource<Int, RankData>() {
         override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RankData> {
             return try {

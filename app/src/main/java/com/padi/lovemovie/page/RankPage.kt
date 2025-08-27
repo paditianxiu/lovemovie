@@ -43,7 +43,6 @@ fun RankPage() {
             content = {
                 items(data.itemCount) {
                     val item = data[it]
-                    println(item)
                     MovieGridItem(item as Any)
                 }
                 item(span = {
